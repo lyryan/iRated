@@ -18,4 +18,8 @@ public class DynamoDbRepository {
     public void insertIntoDynamoDB(Rating rating){
         mapper.save(rating);
     }
+
+    public Rating getRating(String ratingId){
+        return mapper.load(Rating.class, ratingId);
+    }
 }
