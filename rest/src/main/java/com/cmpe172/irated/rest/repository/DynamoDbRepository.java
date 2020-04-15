@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.cmpe172.irated.rest.model.Student;
+import com.cmpe172.irated.rest.model.Rating;
 
 @Repository
 public class DynamoDbRepository {
@@ -15,7 +15,7 @@ public class DynamoDbRepository {
     @Autowired
     private DynamoDBMapper mapper;
 
-    public void insertIntoDynamoDB(Student student){
-        mapper.save(student);
+    public void insertIntoDynamoDB(Rating rating){
+        mapper.save(rating);
     }
 }
