@@ -5,8 +5,17 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.cmpe172.irated.rest.model.Rating;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
+import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+import com.cmpe172.irated.rest.model.Professor;
+import com.cmpe172.irated.rest.model.Review;
 
 @Repository
 public class DynamoDbRepository {
@@ -15,11 +24,33 @@ public class DynamoDbRepository {
     @Autowired
     private DynamoDBMapper mapper;
 
-    public void insertIntoDynamoDB(Rating rating){
-        mapper.save(rating);
+    public void insertProfessorIntoDB(Professor professor) {
+        mapper.save(professor);
     }
 
-    public Rating getRating(String ratingId){
-        return mapper.load(Rating.class, ratingId);
+    public Professor getProfessorDetails(String professorId) {
+        return mapper.load(Professor.class, professorId);
+    }
+
+    public void appendReview(String professorId, Review review) {
+        try {
+            Professor professor = mapper.load(Professor.class, professorId);
+            Review newReview = new Review();
+            newReview.setContent(review.getContent());
+            newReview.setRating(review.getRating());
+            professor.getReviews().add(newReview);
+            mapper.save(professor, buildDBSaveExpression(professor));
+        } catch (ConditionalCheckFailedException exception) {
+            LOGGER.error("invalid data - " + exception.getMessage());
+        }
+    }
+
+    public DynamoDBSaveExpression buildDBSaveExpression(Professor professor) {
+        DynamoDBSaveExpression saveExpression = new DynamoDBSaveExpression();
+        Map<String, ExpectedAttributeValue> expectedId = new HashMap<>();
+        expectedId.put("professorId", new ExpectedAttributeValue(new AttributeValue(professor.getProfessorId()))
+                .withComparisonOperator(ComparisonOperator.EQ));
+        saveExpression.setExpected(expectedId);
+        return saveExpression;
     }
 }
