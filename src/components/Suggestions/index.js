@@ -15,16 +15,20 @@ export default function TypographyMenu(props) {
   const classes = useStyles();
   const { results } = props;
   return (
-    <>
-      {results.length ? (
-        <Paper className={classes.root}>
-          <MenuList>
-            {results.map((professor) => {
-              return <MenuItem>{professor.name}</MenuItem>;
-            })}
-          </MenuList>
-        </Paper>
-      ) : null}
-    </>
+    <Paper className={classes.root}>
+      <MenuList>
+        {results.length ? (
+          results.map((professor) => {
+            return (
+              <MenuItem key={professor.professorId}>
+                {professor.professorName}
+              </MenuItem>
+            );
+          })
+        ) : (
+          <MenuItem>No results found</MenuItem>
+        )}
+      </MenuList>
+    </Paper>
   );
 }

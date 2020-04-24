@@ -81,28 +81,18 @@ class Header extends React.Component {
   };
 
   getProfessors = () => {
-    /*axios.get("").then(({ data }) => {
-      this.setState({
-        results: data.data,
+    axios
+      .get("http://localhost:8080/dynamoDb", {
+        params: {
+          name: this.state.searchInput.toLowerCase(),
+        },
+      })
+      .then(({ data }) => {
+        console.log("this is the data", data);
+        this.setState({
+          results: data,
+        });
       });
-    });*/
-
-    let results;
-
-    if (!this.state.searchInput.length) results = [];
-    else {
-      results = data.filter((professor) => {
-        if (
-          professor.name
-            .toLowerCase()
-            .includes(this.state.searchInput.toLowerCase())
-        ) {
-          return professor;
-        }
-      });
-    }
-
-    this.setState({ results });
   };
 
   render() {
@@ -129,7 +119,9 @@ class Header extends React.Component {
                 onChange={this.handleChange}
                 value={this.state.searchInput}
               />
-              <Suggestions results={this.state.results} />
+              {this.state.searchInput.length ? (
+                <Suggestions results={this.state.results} />
+              ) : null}
             </div>
           </Toolbar>
         </AppBar>

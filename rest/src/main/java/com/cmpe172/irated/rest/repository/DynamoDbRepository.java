@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
@@ -30,6 +32,18 @@ public class DynamoDbRepository {
 
     public Professor getProfessorDetails(String professorId) {
         return mapper.load(Professor.class, professorId);
+    }
+    
+    public PaginatedScanList<Professor> getProfessorsByName(String name) {
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":val", new AttributeValue().withS(name));
+
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+            .withFilterExpression("contains(professorName, :val)").withExpressionAttributeValues(eav);
+
+        PaginatedScanList<Professor> scanResult = mapper.scan(Professor.class, scanExpression);
+        
+        return scanResult;
     }
 
     public void appendReview(String professorId, Review review) {

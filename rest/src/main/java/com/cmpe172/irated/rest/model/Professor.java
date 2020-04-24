@@ -14,8 +14,7 @@ public class Professor implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String professorId;
-    private String firstName;
-    private String lastName;
+    private String professorName;
     private String college;
     private String department;
     private List<Review> reviews;
@@ -31,21 +30,12 @@ public class Professor implements Serializable {
     }
 
     @DynamoDBAttribute
-    public String getFirstName() {
-        return firstName;
+    public String getProfessorName() {
+        return professorName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @DynamoDBAttribute
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setProfessorName(String professorName) {
+        this.professorName = professorName;
     }
 
     @DynamoDBAttribute
