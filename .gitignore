@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+rest/src/main/resources/application.properties
+
+/dynamodb/dynamodb_data
