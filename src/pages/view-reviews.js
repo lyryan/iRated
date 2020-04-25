@@ -25,7 +25,17 @@ class ViewReviews extends React.Component {
     if (
       this.props.match.params.professorId !== prevProps.match.params.professorId
     ) {
-      this.getProfessorDetails();
+      this.setState(
+        {
+          professorDetails: {
+            professorId: '',
+            professorName: '',
+            college: '',
+            department: '',
+          },
+        },
+        this.getProfessorDetails()
+      );
     }
   }
 
@@ -40,7 +50,6 @@ class ViewReviews extends React.Component {
         },
       })
       .then(({ data }) => {
-        console.log('this is the details', data);
         this.setState({
           professorDetails: data,
         });

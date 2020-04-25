@@ -1,11 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  withRouter,
-} from 'react-router-dom';
 
 import { fade, withStyles } from '@material-ui/core/styles';
 
@@ -15,17 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
-import Home from '../../pages/index';
-import ViewReviews from '../../pages/view-reviews';
-
 import Suggestions from '../Suggestions';
-
-// const data = [
-//   { name: 'thomas babu', school: 'san jose state university' },
-//   { name: 'austin thomas', school: 'san jose state university' },
-//   { name: 'rod fatoohi', school: 'san jose state university' },
-//   { name: 'frank lin', school: 'san jose state university' },
-// ];
 
 const useStyles = (theme) => ({
   grow: {
@@ -112,42 +96,33 @@ class Header extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Router>
-        <div className={classes.grow}>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography className={classes.title} variant="h6" noWrap>
-                iRated
-              </Typography>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ 'aria-label': 'search' }}
-                  onChange={this.handleChange}
-                  value={this.state.searchInput}
-                />
-                {this.state.searchInput.length ? (
-                  <Suggestions results={this.state.results} />
-                ) : null}
+      <div className={classes.grow}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography className={classes.title} variant="h6" noWrap>
+              iRated
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
               </div>
-            </Toolbar>
-          </AppBar>
-          <Switch>
-            <Route path="/" component={Home} exact />
-            <Route
-              path="/view-reviews/:professorId"
-              render={(routeProps) => <ViewReviews {...routeProps} />}
-            />
-          </Switch>
-        </div>
-      </Router>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={this.handleChange}
+                value={this.state.searchInput}
+              />
+              {this.state.searchInput.length ? (
+                <Suggestions results={this.state.results} />
+              ) : null}
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   }
 }
