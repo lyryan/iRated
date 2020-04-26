@@ -21,51 +21,53 @@ import com.cmpe172.irated.rest.model.Review;
 
 @Repository
 public class DynamoDbRepository {
-    public static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbRepository.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(DynamoDbRepository.class);
 
-    @Autowired
-    private DynamoDBMapper mapper;
+	@Autowired
+	private DynamoDBMapper mapper;
 
-    public void insertProfessorIntoDB(Professor professor) {
-    		professor.setProfessorName(professor.getProfessorName().toLowerCase());
-        mapper.save(professor);
-    }
+	public void insertProfessorIntoDB(Professor professor) {
+		professor.setProfessorName(professor.getProfessorName().toLowerCase());
+		mapper.save(professor);
+	}
 
-    public Professor getProfessorDetails(String professorId) {
-        return mapper.load(Professor.class, professorId);
-    }
-    
-    public PaginatedScanList<Professor> getProfessorsByName(String name) {
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":val", new AttributeValue().withS(name));
+	public Professor getProfessorDetails(String professorId) {
+		return mapper.load(Professor.class, professorId);
+	}
 
-        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-            .withFilterExpression("contains(professorName, :val)").withExpressionAttributeValues(eav);
+	public PaginatedScanList<Professor> getProfessorsByName(String name) {
+		Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+		eav.put(":val", new AttributeValue().withS(name));
 
-        PaginatedScanList<Professor> scanResult = mapper.scan(Professor.class, scanExpression);
-        
-        return scanResult;
-    }
+		DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+				.withFilterExpression("contains(professorName, :val)").withExpressionAttributeValues(eav);
 
-    public void appendReview(String professorId, Review review) {
-        try {
-            Professor professor = mapper.load(Professor.class, professorId);
-            Review newReview = new Review();
-            newReview.setContent(review.getContent());
-            newReview.setRating(review.getRating());
-            professor.getReviews().add(newReview);
-            mapper.save(professor, buildDBSaveExpression(professor));
-        } catch (ConditionalCheckFailedException exception) {
-            LOGGER.error("invalid data - " + exception.getMessage());
-        }
-    }
+		PaginatedScanList<Professor> scanResult = mapper.scan(Professor.class, scanExpression);
 
-    public DynamoDBSaveExpression buildDBSaveExpression(Professor professor) {
-        DynamoDBSaveExpression saveExpression = new DynamoDBSaveExpression();
-        Map<String, ExpectedAttributeValue> expectedId = new HashMap<>();
-        expectedId.put("professorId", new ExpectedAttributeValue(new AttributeValue(professor.getProfessorId()))
-                .withComparisonOperator(ComparisonOperator.EQ));
-        saveExpression.setExpected(expectedId);
-        return saveExpression;
-    }
+		return scanResult;
+	}
+
+	public Review appendReview(String professorId, Review review) {
+		Review newReview = new Review();
+		newReview.setContent(review.getContent());
+		newReview.setRating(review.getRating());
+		try {
+			Professor professor = mapper.load(Professor.class, professorId);
+			professor.getReviews().add(newReview);
+			mapper.save(professor, buildDBSaveExpression(professor));
+		} catch (ConditionalCheckFailedException exception) {
+			LOGGER.error("invalid data - " + exception.getMessage());
+		}
+
+		return newReview;
+	}
+
+	public DynamoDBSaveExpression buildDBSaveExpression(Professor professor) {
+		DynamoDBSaveExpression saveExpression = new DynamoDBSaveExpression();
+		Map<String, ExpectedAttributeValue> expectedId = new HashMap<>();
+		expectedId.put("professorId", new ExpectedAttributeValue(new AttributeValue(professor.getProfessorId()))
+				.withComparisonOperator(ComparisonOperator.EQ));
+		saveExpression.setExpected(expectedId);
+		return saveExpression;
+	}
 }

@@ -4,6 +4,20 @@ import Card from "../components/Card";
 import styles from "./view-reviews.module.css";
 import StarRatings from "react-star-ratings";
 import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Slide from "@material-ui/core/Slide";
+import { withStyles } from "@material-ui/core/styles";
+import Form from "../components/Form";
+
+const useStyles = (theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    outline: "none",
+  },
+});
 
 class ViewReviews extends React.Component {
   constructor(props) {
@@ -16,6 +30,7 @@ class ViewReviews extends React.Component {
         department: "",
         reviews: [],
       },
+      showModal: false,
       overallRating: 0,
     };
   }
@@ -45,6 +60,36 @@ class ViewReviews extends React.Component {
       );
     }
   }
+
+  handleModalClose = () => {
+    this.setState({ showModal: false });
+  };
+
+  handleModalOpen = () => {
+    this.setState({ showModal: true });
+  };
+
+  handleSubmit = (newReview) => {
+    this.handleModalClose();
+    const { match } = this.props;
+    const pid = match.params.professorId;
+
+    axios({
+      method: "put",
+      url: `http://localhost:8080/dynamoDb`,
+      data: newReview,
+      params: {
+        professorId: pid,
+      },
+    }).then((res) =>
+      this.setState((prevState) => ({
+        professorDetails: {
+          ...prevState,
+          reviews: [...prevState.professorDetails.reviews, res.data],
+        },
+      }))
+    );
+  };
 
   getProfessorDetails = () => {
     const { match } = this.props;
@@ -84,6 +129,7 @@ class ViewReviews extends React.Component {
 
   render() {
     const { professorDetails } = this.state;
+    const { classes } = this.props;
     return (
       <div>
         <div className={styles.header}>
@@ -99,12 +145,32 @@ class ViewReviews extends React.Component {
           </div>
         </div>
         <div className={styles.cards}>{this.renderCards()}</div>
-        <Button variant="outlined" color="primary">
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={this.handleModalOpen}
+        >
           Add Review
         </Button>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={this.state.showModal}
+          onClose={this.handleModalClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Slide in={this.state.showModal} timeout={300}>
+            <Form submit={(newReview) => this.handleSubmit(newReview)} />
+          </Slide>
+        </Modal>
       </div>
     );
   }
 }
 
-export default ViewReviews;
+export default withStyles(useStyles, { withTheme: true })(ViewReviews);

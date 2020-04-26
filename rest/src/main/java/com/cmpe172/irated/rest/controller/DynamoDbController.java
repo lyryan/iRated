@@ -42,7 +42,8 @@ public class DynamoDbController {
     }
 
     @RequestMapping(value = "/dynamoDb", method = RequestMethod.PUT)
-    public void appendReview(@RequestParam String professorId, @RequestBody Review review) {
-        repository.appendReview(professorId, review);
+    public ResponseEntity<Review> appendReview(@RequestParam String professorId, @RequestBody Review review) {
+        Review newReview = repository.appendReview(professorId, review);
+        return new ResponseEntity<Review>(newReview, HttpStatus.OK);
     }
 }
