@@ -84,7 +84,7 @@ class ViewReviews extends React.Component {
     }).then((res) =>
       this.setState((prevState) => ({
         professorDetails: {
-          ...prevState,
+          ...prevState.professorDetails,
           reviews: [...prevState.professorDetails.reviews, res.data],
         },
       }))
