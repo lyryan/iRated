@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
+import MenuList from "@material-ui/core/MenuList";
+import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
 
 const useStyles = (theme) => ({
   root: {
     width: 230,
-    position: 'absolute',
+    position: "absolute",
   },
 });
 
@@ -21,6 +21,11 @@ class TypographyMenu extends React.Component {
         <MenuList>
           {results.length ? (
             results.map((professor) => {
+              // transform name to correct format
+              professor.professorName = professor.professorName
+                .split(" ")
+                .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                .join(" ");
               return (
                 <MenuItem key={professor.professorId}>
                   <Link to={`/view-reviews/${professor.professorId}`}>

@@ -27,6 +27,7 @@ public class DynamoDbRepository {
     private DynamoDBMapper mapper;
 
     public void insertProfessorIntoDB(Professor professor) {
+    		professor.setProfessorName(professor.getProfessorName().toLowerCase());
         mapper.save(professor);
     }
 

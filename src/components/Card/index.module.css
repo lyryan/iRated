@@ -1,0 +1,13 @@
+.container {
+  border-width: 1px 1px 0px 1px;
+  border-color: #ccc;
+  border-style: solid;
+  text-align: left;
+  padding: 10px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
