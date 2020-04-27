@@ -131,11 +131,13 @@ class ViewReviews extends React.Component {
     const { professorDetails } = this.state;
     const { classes } = this.props;
     return (
-      <div>
+      <div style={{ paddingBottom: "50px" }}>
         <div className={styles.header}>
-          <h1>{professorDetails.professorName}</h1>
+          <h1 style={{ marginTop: 30, marginBottom: 0 }}>
+            {professorDetails.professorName}
+          </h1>
           {professorDetails.college} - {professorDetails.department}
-          <div>
+          <div style={{ marginTop: 10, zIndex: "-1000", position: "relative" }}>
             <StarRatings
               rating={this.state.overallRating}
               starRatedColor="orange"
@@ -146,7 +148,7 @@ class ViewReviews extends React.Component {
         </div>
         <div className={styles.cards}>{this.renderCards()}</div>
         <Button
-          variant="outlined"
+          variant="contained"
           color="primary"
           onClick={this.handleModalOpen}
         >

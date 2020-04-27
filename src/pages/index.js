@@ -1,7 +1,14 @@
-import React from 'react';
+import React from "react";
+import styles from "./index.module.css";
+import Background from "../assets/images/classroom-background.png";
 
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div>
+      <img src={Background} />
+      <div className={styles.slogan}>Real professors, real reviews.</div>
+    </div>
+  );
 };
 
 export default Home;

@@ -1,0 +1,39 @@
+/*.container {
+  background: url("../assets/images/classroom-background.png");
+  height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+}*/
+
+img {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: -10;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  /*background-repeat: no-repeat;
+  overflow: hidden;
+  background-size: cover;*/
+}
+
+.slogan {
+  font-size: 50px;
+  color: white;
+  width: 800px;
+  height: 100px;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}

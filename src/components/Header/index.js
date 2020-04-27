@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 import { fade, withStyles } from "@material-ui/core/styles";
 
 import AppBar from "@material-ui/core/AppBar";
@@ -100,9 +100,12 @@ class Header extends React.Component {
       <div className={classes.grow}>
         <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.title} variant="h6" noWrap>
-              iRated
-            </Typography>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              <Typography className={classes.title} variant="h6" noWrap>
+                iRated
+              </Typography>
+            </Link>
+
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />

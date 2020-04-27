@@ -17,9 +17,11 @@ const useStyles = (theme) => ({
   },
   button: {
     display: "block",
+    margin: "0 auto 0",
   },
   text: {
     display: "block",
+    marginBottom: 10,
   },
 });
 
@@ -76,10 +78,11 @@ class Form extends Component {
             placeholder="What did you like or dislike about this professor?"
             value={this.state.newContent}
             onChange={this.changeContent}
+            fullWidth = {true}
           />
           <Button
             className={classes.button}
-            variant="outlined"
+            variant="contained"
             color="primary"
             type="submit"
           >
