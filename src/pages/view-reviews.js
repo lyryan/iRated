@@ -81,14 +81,22 @@ class ViewReviews extends React.Component {
       params: {
         professorId: pid,
       },
-    }).then((res) =>
+    }).then((res) => {
+      console.log(res, "thiss res");
+      let newRating =
+        [...this.state.professorDetails.reviews, res.data].reduce(
+          (acc, curr) => acc + curr.rating,
+          0
+        ) /
+        (this.state.professorDetails.reviews.length + 1);
       this.setState((prevState) => ({
+        overallRating: newRating,
         professorDetails: {
           ...prevState.professorDetails,
           reviews: [...prevState.professorDetails.reviews, res.data],
         },
-      }))
-    );
+      }));
+    });
   };
 
   getProfessorDetails = () => {
