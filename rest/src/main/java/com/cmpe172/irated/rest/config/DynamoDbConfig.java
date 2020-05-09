@@ -14,33 +14,26 @@ import com.amazonaws.util.StringUtils;
 @Configuration
 public class DynamoDbConfig {
 
-    @Value("${amazon.dynamodb.endpoint}")
-    private String dBEndpoint;
-  
-    @Value("${amazon.aws.accesskey}")
-    private String accessKey;
-  
-    @Value("${amazon.aws.secretkey}")
-    private String secretKey;
+  @Value("${amazon.aws.accesskey}")
+  private String accessKey;
 
-    @Bean
-    public DynamoDBMapper mapper(){
-        return new DynamoDBMapper(amazonDynamoDBConfig());
-    }
+  @Value("${amazon.aws.secretkey}")
+  private String secretKey;
 
-    @Bean
-    public AmazonDynamoDB amazonDynamoDBConfig() {
-      AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(amazonAWSCredentials());
-  
-      if (!StringUtils.isNullOrEmpty(dBEndpoint)) {
-        dynamoDB.setEndpoint(dBEndpoint);
-      }
-  
-      return dynamoDB;
-    }
-  
-    @Bean
-    public AWSCredentials amazonAWSCredentials() {
-      return new BasicAWSCredentials(accessKey, secretKey);
-    }
+  @Bean
+  public DynamoDBMapper mapper() {
+    return new DynamoDBMapper(amazonDynamoDBConfig());
+  }
+
+  @Bean
+  public AmazonDynamoDB amazonDynamoDBConfig() {
+    AmazonDynamoDB dynamoDB = new AmazonDynamoDBClient(amazonAWSCredentials());
+
+    return dynamoDB;
+  }
+
+  @Bean
+  public AWSCredentials amazonAWSCredentials() {
+    return new BasicAWSCredentials(accessKey, secretKey);
+  }
 }
