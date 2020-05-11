@@ -1,21 +1,21 @@
-import React from "react";
-import axios from "axios";
-import Card from "../components/Card";
-import styles from "./view-reviews.module.css";
-import StarRatings from "react-star-ratings";
-import Button from "@material-ui/core/Button";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Slide from "@material-ui/core/Slide";
-import { withStyles } from "@material-ui/core/styles";
-import Form from "../components/Form";
+import React from 'react';
+import axios from 'axios';
+import Card from '../components/Card';
+import styles from './view-reviews.module.css';
+import StarRatings from 'react-star-ratings';
+import Button from '@material-ui/core/Button';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Slide from '@material-ui/core/Slide';
+import { withStyles } from '@material-ui/core/styles';
+import Form from '../components/Form';
 
 const useStyles = (theme) => ({
   modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    outline: "none",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    outline: 'none',
   },
 });
 
@@ -24,10 +24,10 @@ class ViewReviews extends React.Component {
     super(props);
     this.state = {
       professorDetails: {
-        professorId: "",
-        professorName: "",
-        college: "",
-        department: "",
+        professorId: '',
+        professorName: '',
+        college: '',
+        department: '',
         reviews: [],
       },
       showModal: false,
@@ -49,10 +49,10 @@ class ViewReviews extends React.Component {
       this.setState(
         {
           professorDetails: {
-            professorId: "",
-            professorName: "",
-            college: "",
-            department: "",
+            professorId: '',
+            professorName: '',
+            college: '',
+            department: '',
             reviews: [],
           },
         },
@@ -75,14 +75,14 @@ class ViewReviews extends React.Component {
     const pid = match.params.professorId;
 
     axios({
-      method: "put",
-      url: `http://localhost:8080/dynamoDb`,
+      method: 'put',
+      url: `http://34.235.168.236:8080/dynamoDb`,
       data: newReview,
       params: {
         professorId: pid,
       },
     }).then((res) => {
-      console.log(res, "thiss res");
+      console.log(res, 'thiss res');
       let newRating =
         [...this.state.professorDetails.reviews, res.data].reduce(
           (acc, curr) => acc + curr.rating,
@@ -104,7 +104,7 @@ class ViewReviews extends React.Component {
     const pid = match.params.professorId;
 
     axios
-      .get("http://localhost:8080/dynamoDb", {
+      .get('http://34.235.168.236:8080/dynamoDb', {
         params: {
           professorId: pid,
         },
@@ -112,9 +112,9 @@ class ViewReviews extends React.Component {
       .then(({ data }) => {
         // change name to proper format
         data.professorName = data.professorName
-          .split(" ")
+          .split(' ')
           .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-          .join(" ");
+          .join(' ');
 
         const overallRating = data.reviews.length
           ? parseFloat(
@@ -139,13 +139,13 @@ class ViewReviews extends React.Component {
     const { professorDetails } = this.state;
     const { classes } = this.props;
     return (
-      <div style={{ paddingBottom: "50px" }}>
+      <div style={{ paddingBottom: '50px' }}>
         <div className={styles.header}>
           <h1 style={{ marginTop: 30, marginBottom: 0 }}>
             {professorDetails.professorName}
           </h1>
           {professorDetails.college} - {professorDetails.department}
-          <div style={{ marginTop: 10, zIndex: "-1000", position: "relative" }}>
+          <div style={{ marginTop: 10, zIndex: '-1000', position: 'relative' }}>
             <StarRatings
               rating={this.state.overallRating}
               starRatedColor="orange"
